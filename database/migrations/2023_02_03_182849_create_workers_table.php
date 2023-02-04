@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('department_id')->constrained();
             $table->foreignId('work_position_id')->constrained();
+            $table->date('adopted_at')->nullable();
             $table->timestamps();
         });
     }
