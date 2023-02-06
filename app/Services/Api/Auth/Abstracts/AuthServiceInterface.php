@@ -3,11 +3,14 @@
 namespace App\Services\Api\Auth\Abstracts;
 use App\DTO\LoginData;
 use App\DTO\RegisterData;
+use App\DTO\RestoreConfirmData;
+use App\DTO\SendData;
 use App\Exceptions\DefaultException;
 use App\Exceptions\EmailNotUniqueException;
 use App\Exceptions\EmailNotVerifyException;
 use App\Exceptions\WrongLoginDataException;
 use App\Models\User;
+use Symfony\Component\HttpFoundation\Response;
 
 interface AuthServiceInterface
 {
@@ -30,5 +33,14 @@ interface AuthServiceInterface
      * @return User
      */
     public function login(LoginData $data): User;
+
+    /**
+     * @param SendData $data
+     * @return Response
+     * @throws DefaultException
+     */
+    public function restore(SendData $data): Response;
+
+    public function restoreConfirm(RestoreConfirmData $data);
 
 }
