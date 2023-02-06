@@ -41,6 +41,11 @@ interface AuthServiceInterface
      */
     public function restore(SendData $data): Response;
 
-    public function restoreConfirm(RestoreConfirmData $data);
+    /**
+     * @param RestoreConfirmData $data
+     * @return Response
+     * @throws DefaultException
+     */
+    public function restoreConfirm(RestoreConfirmData $data): Response;
 
 }

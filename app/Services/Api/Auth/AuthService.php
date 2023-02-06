@@ -78,6 +78,9 @@ class AuthService implements AuthServiceInterface
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public function restoreConfirm(RestoreConfirmData $data): Response
     {
         $status = Password::reset(
