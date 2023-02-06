@@ -20,6 +20,7 @@ class Worker extends Model
     protected $fillable = [
         'department_id',
         'work_position_id',
+        'adopted_at',
     ];
 
     /**

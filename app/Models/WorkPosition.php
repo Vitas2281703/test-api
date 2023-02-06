@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class WorkPosition extends Model
 {
@@ -14,4 +15,12 @@ class WorkPosition extends Model
     protected $fillable = [
         'name',
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function workers(): HasMany
+    {
+        return $this->hasMany(Worker::class);
+    }
 }

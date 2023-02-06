@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -53,11 +53,11 @@ class User extends \TCG\Voyager\Models\User
     ];
 
     /**
-     * @return HasMany
+     * @return HasOne
      */
-    public function worker(): HasMany
+    public function worker(): HasOne
     {
-        return $this->hasMany(Worker::class);
+        return $this->hasOne(Worker::class);
     }
 
 
