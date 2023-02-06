@@ -40,8 +40,8 @@
 
                         <div class="panel-body">
                             <div class="form-group">
-                                <label for="name">{{ __('voyager::generic.name') }}</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('voyager::generic.name') }}"
+                                <label for="name">Имя</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Имя"
                                        value="{{ old('name', $dataTypeContent->name ?? '') }}">
                             </div>
 
@@ -93,6 +93,78 @@
                                     <br>
                                 @endif
                                 <input type="text" class="form-control" id="city" name="city" value="{{ old('city', $dataTypeContent->city  ?? '') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="city">О себе</label>
+                                @if(isset($dataTypeContent->about))
+                                    <br>
+                                @endif
+                                <textarea class="form-control" id="about" name="about">{{ old('about', $dataTypeContent->about  ?? '') }}</textarea>
+                            </div>
+                            @php
+                                if (isset($dataTypeContent->type)) {
+                                    $selected_type = $dataTypeContent->type;
+                                }
+                            @endphp
+                            <div class="form-group">
+                                <label for="type">Тип</label>
+                                <select class="form-control select2" id="type" name="type">
+
+                                    <option value="" @if(!isset($selected_type)) selected @endif>
+                                        Не выбран</option>
+                                    <option value="{{ App\Domain\Enums\Users\Type::BACK }}"
+                                            @if(isset($selected_type) && $selected_type == App\Domain\Enums\Users\Type::BACK )
+                                                selected @endif>
+                                        {{ App\Domain\Enums\Users\Type::BACK }}
+                                    </option>
+                                    <option value="{{ App\Domain\Enums\Users\Type::FRONT }}"
+                                            @if(isset($selected_type) && $selected_type == App\Domain\Enums\Users\Type::FRONT )
+                                                selected @endif>
+                                        {{ App\Domain\Enums\Users\Type::FRONT }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="github">Github</label>
+                                @if(isset($dataTypeContent->github))
+                                    <br>
+                                @endif
+                                <input type="text" class="form-control" id="gtihub" name="github" value="{{ old('github', $dataTypeContent->github  ?? '') }}">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="is_finished">Выполнение</label>
+                                <select class="form-control select2" id="is_finished" name="is_finished">
+
+                                    <option value="0" @if($dataTypeContent->is_finished === false)
+                                        selected @endif>
+                                        Не выполнено</option>
+                                    <option value="1" @if($dataTypeContent->is_finished === true)
+                                        selected @endif>
+                                        Выполнено</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Телефон</label>
+                                @if(isset($dataTypeContent->phone))
+                                    <br>
+                                @endif
+                                <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone', $dataTypeContent->phone  ?? '') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="telegram">Telegram</label>
+                                @if(isset($dataTypeContent->telegram))
+                                    <br>
+                                @endif
+                                <input type="text" class="form-control" id="telegram" name="telegram" value="{{ old('telegram', $dataTypeContent->telegram  ?? '') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="telegram">Дата рождения</label>
+                                @if(isset($dataTypeContent->birthday))
+                                    <br>
+                                @endif
+                                <input type="date" class="form-control" id="birthday" name="birthday" value="{{ old('birthday', $dataTypeContent->birthday  ?? '') }}">
                             </div>
                             @php
                             if (isset($dataTypeContent->locale)) {
