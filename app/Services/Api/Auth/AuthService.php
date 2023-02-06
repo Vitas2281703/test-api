@@ -2,14 +2,14 @@
 
 namespace App\Services\Api\Auth;
 use App\DTO\LoginData;
-use App\DTO\RegistrationData;
+use App\DTO\RegisterData;
 use App\Exceptions\DefaultException;
+use App\Exceptions\EmailNotUniqueException;
 use App\Exceptions\EmailNotVerifyException;
 use App\Exceptions\WrongLoginDataException;
 use App\Models\User;
 use App\Repositories\User\Abstracts\UserRepositoryInterface;
 use App\Services\Api\Auth\Abstracts\AuthServiceInterface;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService implements AuthServiceInterface
@@ -24,14 +24,21 @@ class AuthService implements AuthServiceInterface
     /**
      * @inheritDoc
      */
-//    public function registration(RegistrationData $data): ?string {
-//
-//
-//    }
+    public function register(RegisterData $data): User
+    {
+        $user = $this->repository->findByField('email', $data->email)->first();
+
+        if (!isset($user)){
+            return $this->repository->create($data->toArray());
+        }else{
+            throw new EmailNotUniqueException();
+        }
+
+    }
     /**
      * @inheritDoc
      */
-    public function login(LoginData $data): User|EmailNotVerifyException|WrongLoginDataException|DefaultException
+    public function login(LoginData $data): User
     {
         $user = $this->repository->findByField('email', $data->email)->first();
 
