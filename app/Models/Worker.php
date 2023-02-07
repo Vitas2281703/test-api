@@ -26,7 +26,7 @@ class Worker extends Model
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo
+    public function users(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
