@@ -26,6 +26,7 @@ class RestoreConfirmRequest extends FormRequest
         return [
             'token' => 'required|string',
             'password' => 'required|string|min:6|confirmed',
+            'email' => 'required|string'
         ];
     }
 }
