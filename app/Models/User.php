@@ -53,6 +53,9 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    protected $with = [
+        'worker',
+    ];
     /**
      * @return HasOne
      */
