@@ -7,13 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FilterRequest;
 use App\Http\Resources\UserWorkerResource;
 use App\Http\Resources\UserWorkersResource;
-use App\Services\Api\Worker\Abstracts\WorkerServiceInterface;
+use App\Services\Api\Worker\Abstracts\UserServiceInterface;
 use Illuminate\Http\Request;
 
 class WorkerController extends Controller
 {
     public function __construct(
-        public WorkerServiceInterface $workerService,
+        public UserServiceInterface $workerService,
     )
     {
     }

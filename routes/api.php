@@ -30,4 +30,9 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
        Route::get('/', [\App\Http\Controllers\Api\WorkerController::class, 'getWorkers'])->name('workers');
        Route::get('/{user}', [\App\Http\Controllers\Api\WorkerController::class, 'getWorker'])->name('worker');
     });
+
+    Route::group(['prefix' => 'user'], function (){
+        Route::get('/', [\App\Http\Controllers\Api\UserController::class, 'getUser'])->name('user-get');
+        Route::post('/', [\App\Http\Controllers\Api\UserController::class, 'updateUser'])->name('user-post');
+    });
 });
