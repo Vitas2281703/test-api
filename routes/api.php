@@ -25,4 +25,9 @@ Route::group(['prefix' => 'auth'], function (){
 
 Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::get('/departments', [\App\Http\Controllers\Api\DepartmentController::class, 'showDepartments'])->name('departments');
+
+    Route::group(['prefix' => 'workers'], function (){
+       Route::get('/', [\App\Http\Controllers\Api\WorkerController::class, 'getWorkers'])->name('workers');
+       Route::get('/{user}', [\App\Http\Controllers\Api\WorkerController::class, 'getWorker'])->name('worker');
+    });
 });

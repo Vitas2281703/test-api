@@ -14,13 +14,13 @@ use App\Http\Requests\Api\RegisterRequest;
 use App\Http\Requests\Api\RestoreConfirmRequest;
 use App\Http\Requests\Api\SendRequest;
 use App\Http\Resources\AuthTokenWithUserResource;
-use App\Services\Api\Auth\Abstracts\AuthServiceInterface;
+use App\Services\Api\Auth\Abstracts\WorkerServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
     public function __construct(
-        public AuthServiceInterface $authService,
+        public WorkerServiceInterface $authService,
     )
     {
     }
@@ -52,6 +52,11 @@ class AuthController extends Controller
         return $this->authService->restore(SendData::create($request->validated()));
     }
 
+    /**
+     * @param RestoreConfirmRequest $request
+     * @return Response
+     * @throws DefaultException
+     */
     public function restoreConfirm(RestoreConfirmRequest $request): Response
     {
         return $this->authService->restoreConfirm(RestoreConfirmData::create($request->validated()));
