@@ -1,0 +1,423 @@
+openapi: 3.0.1
+info:
+  title: Laravel API
+  version: 1.0.0
+servers:
+  - url: https://test.test
+tags:
+  - name: Авторизация
+  - name: Прочее
+  - name: Сотрудники
+  - name: Пользователь
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Авторизация
+      summary: Авторизация
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        "200":
+          description: Токен авторизации и информация о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenWithUser'
+        "406":
+          description: Пользователь не подтвердил почту
+        "408":
+          description: Ошибка в заполнении данных
+        default:
+          description: Any expected error
+  /auth/registration:
+    post:
+      tags:
+        - Авторизация
+      summary: Регистрация пользователя
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        "200":
+          description: Токен авторизации и информация о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenWithUser'
+        "408":
+          description: Слишком много пользователей было зарегистрированно за последний час
+        "409":
+          description: Пользователь с такой почтой уже существует
+        default:
+          description: Any expected error
+  /auth/restore:
+    post:
+      tags:
+        - Авторизация
+      summary: Форма для заявки на восстановление пароля
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendRequest'
+      responses:
+        "200":
+          description: Запрос был отправлен
+        default:
+          description: Any expected error
+  /auth/restore/confirm:
+    post:
+      tags:
+        - Авторизация
+      summary: Подтверждение восстановления пароля
+      requestBody:
+        description: Валидация полученных данных
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreConfirmRequest'
+      responses:
+        "200":
+          description: Пароль успешно изменен
+        "404":
+          description: Пользователь с таким токеном не найден
+        default:
+          description: Any expected error
+  /departments:
+    get:
+      tags:
+        - Прочее
+      summary: Список всех отделов и должностей
+      description: Доступно только для зарегистрированных пользователей
+      responses:
+        "200":
+          description: Список всех отделов и должностей
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Departments'
+        default:
+          description: Any expected error
+  /workers:
+    get:
+      tags:
+        - Сотрудники
+      summary: Просмотр списка сотрудников
+      description: Доступно только для зарегистрированных пользователей
+      responses:
+        "200":
+          description: Пагинированный список сотрудников
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWorkers'
+        default:
+          description: Any expected error
+  /workers/{user}:
+    get:
+      tags:
+        - Сотрудники
+      summary: Просмотр данных сотрудника
+      description: Доступно только для зарегистрированных пользователей
+      parameters:
+        - name: user
+          in: path
+          required: true
+          description: ID сотрудника
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Информация о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWorker'
+        default:
+          description: Any expected error
+  /user:
+    get:
+      tags:
+        - Пользователь
+      summary: Просмотр данных пользователя
+      description: Доступно только для зарегистрированных пользователей
+      responses:
+        "200":
+          description: Информация о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: Any expected error
+    post:
+      tags:
+        - Пользователь
+      summary: Изменение данных пользователя
+      description: Доступно только для зарегистрированных пользователей
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        "200":
+          description: Профиль обновлен
+        default:
+          description: Any expected error
+components:
+  schemas:
+    FilterRequest:
+      type: object
+      properties:
+        query:
+          type: string
+          description: Поиск по имени
+        department_id:
+          type: integer
+          description: ID отдела
+        position_id:
+          type: integer
+          description: ID должности
+    LoginRequest:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    RegisterRequest:
+      required:
+        - name
+        - email
+        - password
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        type:
+          type: string
+        github:
+          type: string
+        city:
+          type: string
+        phone:
+          type: string
+        birthday:
+          type: string
+        password:
+          type: string
+    RestoreConfirmRequest:
+      required:
+        - token
+        - password
+        - password_confirmation
+        - email
+      type: object
+      properties:
+        token:
+          type: string
+        password:
+          type: string
+        password_confirmation:
+          type: string
+        email:
+          type: string
+    SendRequest:
+      required:
+        - email
+      type: object
+      properties:
+        email:
+          type: string
+    UpdateUserRequest:
+      required:
+        - about
+        - image
+      type: object
+      properties:
+        name:
+          type: string
+        about:
+          type: string
+        image:
+          type: object
+        github:
+          type: string
+        city:
+          type: string
+        is_finished:
+          type: boolean
+        telegram:
+          type: string
+        phone:
+          type: string
+        birthday:
+          type: string
+    AuthTokenWithUser:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+            login:
+              type: string
+            name:
+              type: string
+            email:
+              type: string
+            about:
+              type: string
+            role_type:
+              type: string
+            city:
+              type: string
+            phone:
+              type: string
+            birthday:
+              type: string
+            image:
+              type: string
+        password:
+          type: string
+    Department:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        workers:
+          $ref: '#/components/schemas/WorkPosition'
+    Departments:
+      type: object
+      properties:
+        departments:
+          $ref: '#/components/schemas/Department'
+    UserCard:
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        image:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        image:
+          type: string
+        about:
+          type: string
+        type:
+          type: string
+        github:
+          type: string
+        city:
+          type: string
+        is_finished:
+          type: boolean
+        phone:
+          type: string
+        birthday:
+          type: string
+    UserWorker:
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        image:
+          type: string
+        about:
+          type: string
+        type:
+          type: string
+        github:
+          type: string
+        worker:
+          type: object
+          properties:
+            department:
+              type: string
+            position:
+              type: string
+            adopted_at:
+              type: string
+    WorkPosition:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    UserWorkers:
+      type: object
+      properties:
+        workers:
+          $ref: '#/components/schemas/UserCard'
+        paginate:
+          $ref: '#/components/schemas/LengthAwarePaginator'
+    LengthAwarePaginator:
+      required:
+        - total
+        - per_page
+        - current_page
+        - last_page
+        - next_page_url
+        - prev_page_url
+        - from
+        - to
+      type: object
+      properties:
+        total:
+          type: string
+        per_page:
+          type: integer
+        current_page:
+          type: integer
+        last_page:
+          type: integer
+        next_page_url:
+          type: string
+        prev_page_url:
+          type: string
+        from:
+          type: integer
+        to:
+          type: integer
